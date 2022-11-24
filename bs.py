@@ -23,12 +23,12 @@ def get_filters():
         city = (input('Select a city among chicago, new york city and washington, Please stick to the spelling:  '))
         city = city.lower()
         if city not in cities:
-            print('Invalid city name.')
+            print('Invalid city name. ')
         else:
             break
     # TO DO: get user input for month (all, january, february, ... , june)
     while True:
-        month = input('Select a month: January, February, March, April, May, or June. /n you can also Enter all! ')
+        month = input('Select a month: January, February, March, April, May, or June. /n you can Enter all! ')
         month = month.lower()
         if month not in months:
             print('invalid input, Make sure you select one of the months!')
@@ -80,7 +80,7 @@ def load_data(city, month, day):
     if day != 'all':
         # filter by day of week to create the new dataframe
         df = df[df['week_day'] == day.title()]
-    
+
     return df
 
 
@@ -108,7 +108,7 @@ def time_stats(df):
 
 
 def station_stats(df):
-    """Displays statistics on the most popular stations and trip."""
+    """Display statistics on the most popular stations and trip."""
 
     print('\nCalculating The Most Popular Stations and Trip...\n')
     start_time = time.time()
