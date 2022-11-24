@@ -23,12 +23,12 @@ def get_filters():
         city = (input('Select a city among chicago, new york city and washington, Please stick to the spelling:  '))
         city = city.lower()
         if city not in cities:
-            print('Invalid city name. ')
+            print('Invalid city name.')
         else:
             break
     # TO DO: get user input for month (all, january, february, ... , june)
     while True:
-        month = input('Select a month: January, February, March, April, May, or June. /n you can Enter all! ')
+        month = input('Select a month: January, February, March, April, May, or June. /n you can also Enter all! ')
         month = month.lower()
         if month not in months:
             print('invalid input, Make sure you select one of the months!')
@@ -59,7 +59,7 @@ def load_data(city, month, day):
     Returns:
         df - Pandas DataFrame containing city data filtered by month and day
     """
-    # if statement to assign the right file based on the name of the city
+
     df = pd.read_csv(CITY_DATA[city])
     #create a column for start time
     df['Start Time'] = pd.to_datetime(df['Start Time'])
@@ -108,7 +108,7 @@ def time_stats(df):
 
 
 def station_stats(df):
-    """Display statistics on the most popular stations and trip."""
+    """Displays statistics on the most popular stations and trip."""
 
     print('\nCalculating The Most Popular Stations and Trip...\n')
     start_time = time.time()
@@ -137,10 +137,10 @@ def trip_duration_stats(df):
 
     # TO DO: display total travel time
     total_travel = df['Trip Duration'].sum()
-    print('Total travel time is: ', total_travel)
+    print('Total travel time is: ', round(total_travel,1), ' Hours.')
     # TO DO: display mean travel time
     mean_travel = df['Trip Duration'].mean()
-    print('Mean Travel Time is: ', mean_travel)
+    print('Mean Travel Time is: ', round(mean_travel,1),' Hours.')
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
@@ -166,38 +166,45 @@ def user_stats(df):
         earliest_year = df['Birth Year'].min()
         most_recent = df['Birth Year'].max()
         common_year = df['Birth Year'].mode()[0]
-        print('The Earliest Year of birth is: {}. \nThe Most recent is: {}. \nThe Most Common is: {}'.format(earliest_year,most_recent,common_year))
+        print('The Earliest Year of birth is: {}. \nThe Most recent is: {}. \nThe Most Common is: {}'.format(int(earliest_year),int(most_recent),int(common_year)))
+
     except:
         print('Birth Year Data is Missing, SORRY!\n')
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
-
+start_loc = 0
 def view(df):
+    """ To Ask the user if he wants to see the first 5 rows of data"""
     start_loc = 0
-    while start_loc<len(df):
-       data_view=input('do you want to see the first 5 rows of data? ')
-       data_view=data_view.lower()
-       start_loc=0
-
-       if data_view=='yes':
-           print(df.iloc[start_loc:(start_loc+5)])
-       elif data_view == 'no':
-           break
-       else:
-           print('invalid input!')
-       cont_view = input('do you wish to continue? ')
-       cont_view=cont_view.lower()
-       if cont_view=='yes':
-            start_loc+=5
+    while True:
+        data_view=input('do you want to see the first 5 rows of data? ')
+        data_view=data_view.lower()
+        if data_view == 'yes':
             print(df.iloc[start_loc:(start_loc+5)])
-       elif cont_view == 'no':
+            view_more(df)
             break
-       else:
-            print('invalid entry!')
+        elif data_view == 'no':
             break
+        else:
+            print('Invalid Input!')
+def view_more(df):
+    """ For continue viewing the data in a seperate function"""
+    start_loc=5
+
+    while True:
+        cont_view = input('Do you wish to continue? ')
+        if cont_view=='no':
+            break
+        elif cont_view == 'yes':
+            print(df.iloc[start_loc:start_loc+5])
+            start_loc+=5
+        else:
+            print('invalid input')
+            continue
+
 def main():
-   while True:
+    while True:
         city, month, day = get_filters()
         df = load_data(city, month, day)
         time_stats(df)
@@ -205,6 +212,7 @@ def main():
         trip_duration_stats(df)
         user_stats(df)
         view(df)
+
         restart = input('\nWould you like to restart? Enter yes or no.\n')
         if restart.lower() != 'yes':
             break
